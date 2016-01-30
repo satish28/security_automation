@@ -5,7 +5,8 @@ Module to perform SSLscan for a URL, check HSTS
 """
 import requests
 import subprocess
-
+import argparse
+import sys
 
 def check_clickjacking(url):
     """
@@ -68,3 +69,34 @@ def check_httpoptions(url):
         print "Options are enabled %s", check_options.status_code
     else:
         print "Options not enabled. %s", check_options.status_code
+
+
+#main function
+def main():
+    """
+    Getting arguments from the user
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-u", "--url",\
+                        help="enter the webaddress Ex: https://google.com")
+    parser.add_argument("-o", "--output",\
+                        help="enter a filename for sslscan output")
+    args = parser.parse_args()
+    if args.url is None:
+        parser.print_help()
+        sys.exit(1)
+    else:
+        url = args.url
+        if args.output is None:
+            print "The output of SSLScan will be stored as sslscan"
+            sslscan_filename = "sslscan"
+        else:
+            sslscan_filename = args.output
+        check_clickjacking(url)
+        check_hsts(url)
+        sslscan(url, sslscan_filename)
+        info_disclosure(url)
+        check_httpoptions(url)
+
+if __name__ == '__main__':
+    main()
