@@ -12,3 +12,7 @@ optional arguments:
   -u URL, --url URL     enter the webaddress Ex: https://example.com
   -o OUTPUT, --output OUTPUT
                           enter a filename for sslscan output
+
+
+* To-Do
+Need to add a function to check if an application has a port 80/443 open when given a url
