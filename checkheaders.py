@@ -42,8 +42,12 @@ def sslscan(url, output_file):
     """
     Perform SSLscan for the given url and output it to the given file
     """
-    subprocess.call(["sslscan", "--no-failed", "--renegotiation",\
-                     "--xml=%s" %output_file, url])
+    if re.match(r'^https://', url):
+        scan_url = re.findall(r'^https://(.*?)(?=.com)', url)[0] + ".com"
+        subprocess.check_output(["sslscan", "--no-failed", "--renegotiation",\
+                                 "--xml=%s" %output_file, scan_url[0]])
+    else:
+        print "Are you sure the application use https??, if so add the url as https://example.com"
 
 #check if server version is disclosed in headers
 def info_disclosure(url):
@@ -117,6 +121,17 @@ def check_track(url):
         print "TRACK method is not enabled on the server.\
         Response status code = %s", track_status[0]
 
+# run the checks
+def run_checks(url, sslscan_filename):
+    """
+    Helper function to run the checks
+    """
+    check_clickjacking(url)
+    check_hsts(url)
+    sslscan(url, sslscan_filename)
+    info_disclosure(url)
+    check_httpmethods(url)
+
 #main function
 def main():
     """
@@ -124,7 +139,7 @@ def main():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("-u", "--url",\
-                        help="enter the webaddress Ex: https://google.com")
+                        help="enter the webaddress Ex: https://example.com")
     parser.add_argument("-o", "--output",\
                         help="enter a filename for sslscan output")
     args = parser.parse_args()
@@ -133,16 +148,17 @@ def main():
         sys.exit(1)
     else:
         url = args.url
-        if args.output is None:
-            print "The output of SSLScan will be stored as sslscan"
-            sslscan_filename = "sslscan"
+        if re.match(r'^(http|https)://', url):
+            if args.output is None:
+                print "The output of SSLScan will be stored as sslscan"
+                sslscan_filename = "sslscan"
+                run_checks(url, sslscan_filename)
+            else:
+                sslscan_filename = args.output
+                run_checks(url, sslscan_filename)
         else:
-            sslscan_filename = args.output
-        check_clickjacking(url)
-        check_hsts(url)
-        sslscan(url, sslscan_filename)
-        info_disclosure(url)
-        check_httpmethods(url)
+            print "Check usage for the url"
+            parser.print_help()
 
 if __name__ == '__main__':
     main()
