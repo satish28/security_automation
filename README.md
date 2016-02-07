@@ -16,7 +16,6 @@ The application depends on <br />
 2. SSLscan.
 3. [requests](http://docs.python-requests.org/en/latest/).
 
-
 ##Usage
 security_automation [-h] [-u URL] [-o OUTPUT]
 
