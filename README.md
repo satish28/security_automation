@@ -27,4 +27,7 @@ optional arguments:
 
 
 ##To-Do<br />
-Need to add a function to check if an application has a port 80/443 open when given a url
+1. Check for XST <br />
+2. Check for Host Header Injection <br />
+3. Find additional information from headers such as "x-forwarded-for" & "x-powered-by" <br />
+4. Need to add a function to check if an application has a port 80/443 open when given a url <br />
