@@ -1,23 +1,31 @@
-#checkheaders
-A small script to check if HSTS headers and headers to protect against clikjacking attacks are implemented.
-In addition to it<br />
-1.  Check the SSL configuration of the website using "SSLScan" and store the output to default filename or filename mentioned by the user.<br />
-2.  Check if insecure HTTP methods are enabled in the server.<br />
-3.  Check if the repsonse headers disclose any server information.<br />
+#Security Automation
+Use this package to perform a basic security checks on a web application.
+The applications performs the following<br />
+1. Checks if the application has Clickjacking protection headers.
+2. Checks if the application has HSTS implemented.
+3. Performs a SSLScan and outputs the allowed ciphers for the application.
+4. Checks what HTTP methods are enabled on the server.
+5.  Checks if the server version information is revealed in response headers.
 
-usage: checkheaders.py [-h] [-u URL] [-o OUTPUT]
+##SetUp
+Use python setup.py install to install the application
+
+##Dependecies:
+The application depends on <br />
+1. [Curl](http://curl.haxx.se/).
+2. SSLscan.
+3. [requests](http://docs.python-requests.org/en/latest/).
+
+
+##Usage
+security_automation [-h] [-u URL] [-o OUTPUT]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -u URL, --url URL     enter the webaddress Ex: https://example.com
-  -o OUTPUT, --output OUTPUT
-                          enter a filename for sslscan output
+  -u URL, --url <<url>>     enter the webaddress Ex: https://example.com
+  -o OUTPUT, --output <<filename>>   enter a filename for sslscan output
 <br />
-Dependecies:<br />
-The application depends on <br />
-1.  [Curl](http://curl.haxx.se/).<br />
-2.  SSLscan.<br />
-3.  [requests](http://docs.python-requests.org/en/latest/).<br />
 
-* To-Do<br />
+
+##To-Do<br />
 Need to add a function to check if an application has a port 80/443 open when given a url
